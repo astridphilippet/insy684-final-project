@@ -1,5 +1,6 @@
 import pandas as pd
 import pytest
+import os
 
 DATA_PATH = "data/crimes_montreal_en.csv"
 REQUIRED_COLUMNS = [
@@ -11,6 +12,8 @@ TARGET = "date"  # the daily crime count is built from this column
 
 @pytest.fixture
 def df():
+    if not os.path.exists(DATA_PATH):
+        pytest.skip("CSV not found in data/, skipping data tests")
     return pd.read_csv(DATA_PATH)
 
 
