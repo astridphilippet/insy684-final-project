@@ -15,3 +15,23 @@ jobs:
         run: |
           cp .env.example .env
           docker compose config --quiet
+
+  lint-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pandas pytest ruff
+
+      - name: Lint with ruff
+        run: ruff check --select E,F .
+
+      - name: Run tests with pytest
+        run: pytest -v
