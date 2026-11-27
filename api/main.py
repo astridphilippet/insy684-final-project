@@ -5,6 +5,7 @@ from typing import Any
 import mlflow.pyfunc
 import pandas as pd
 from fastapi import FastAPI, HTTPException
+from prometheus_fastapi_instrumentator import Instrumentator
 from pydantic import BaseModel
 
 # These come from docker-compose / .env. MODEL_NAME must match the name
@@ -15,6 +16,7 @@ MODEL_VERSION = os.getenv("MODEL_VERSION", "champion")
 
 mlflow.set_tracking_uri(MLFLOW_TRACKING_URI)
 app = FastAPI(title="Model API")
+Instrumentator().instrument(app).expose(app)
 _model = None
 
 

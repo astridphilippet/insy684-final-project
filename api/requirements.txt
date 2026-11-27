@@ -3,3 +3,4 @@ uvicorn[standard]
 mlflow
 pandas
 scikit-learn
+prometheus-fastapi-instrumentator
