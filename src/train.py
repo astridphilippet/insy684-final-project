@@ -28,8 +28,9 @@ def time_split(df, test_frac=0.2):
 def train(df, params, register=True):
     """Fit one model, log it to MLflow, return the run id."""
     train_df, test_df = time_split(df)
-    X_tr, y_tr = train_df[FEATURES], train_df[TARGET]
-    X_te, y_te = test_df[FEATURES], test_df[TARGET]
+    # Floats for every feature, so the API accepts whole numbers or decimals.
+    X_tr, y_tr = train_df[FEATURES].astype("float64"), train_df[TARGET]
+    X_te, y_te = test_df[FEATURES].astype("float64"), test_df[TARGET]
 
     mlflow.set_experiment(EXPERIMENT)
     with mlflow.start_run() as run:
@@ -59,7 +60,9 @@ def train(df, params, register=True):
 def promote_best():
     """Point the 'champion' alias at the registered version with the lowest RMSE."""
     best = mlflow.search_runs(
-        experiment_names=[EXPERIMENT], order_by=["metrics.rmse ASC"]
+        experiment_names=[EXPERIMENT],
+        # Newest run wins a tie, so retraining replaces an equal older model.
+        order_by=["metrics.rmse ASC", "attributes.start_time DESC"],
     ).iloc[0]
     client = MlflowClient()
     for v in client.search_model_versions(f"name='{MODEL_NAME}'"):

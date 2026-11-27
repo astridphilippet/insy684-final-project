@@ -23,7 +23,7 @@ def get_model():
     so the API still starts even if no model is registered yet."""
     global _model
     if _model is None:
-        uri = f"models:/{MODEL_NAME}/{MODEL_VERSION}"
+        uri = f"models:/{MODEL_NAME}@{MODEL_VERSION}"
         try:
             _model = mlflow.pyfunc.load_model(uri)
         except Exception as exc:
@@ -52,7 +52,7 @@ def health():
 @app.post("/predict", response_model=PredictResponse)
 def predict(req: PredictRequest):
     model = get_model()
-    df = pd.DataFrame([req.features])
+    df = pd.DataFrame([req.features]).astype(float)
     try:
         result = model.predict(df)
     except Exception as exc:
