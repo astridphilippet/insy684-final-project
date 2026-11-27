@@ -33,7 +33,7 @@ services:
       - "8000:8000"
     environment:
       MLFLOW_TRACKING_URI: http://mlflow:5000
-      MODEL_NAME: ${MODEL_NAME:-CHANGE_ME_model}
+      MODEL_NAME: ${MODEL_NAME:-insy684-model}
     depends_on:
       - mlflow
 
