@@ -28,7 +28,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pandas pytest ruff
+        run: pip install pandas pytest ruff mlflow scikit-learn prefect
 
       - name: Lint with ruff
         run: ruff check --select E,F .
