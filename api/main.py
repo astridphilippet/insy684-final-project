@@ -27,7 +27,9 @@ def get_model():
         try:
             _model = mlflow.pyfunc.load_model(uri)
         except Exception as exc:
-            raise HTTPException(status_code=503, detail=f"Model not available at {uri}: {exc}")
+            raise HTTPException(
+                status_code=503, detail=f"Model not available at {uri}: {exc}"
+            )
     return _model
 
 
@@ -43,7 +45,8 @@ class PredictResponse(BaseModel):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model_name": MODEL_NAME, "model_loaded": _model is not None}
+    loaded = _model is not None
+    return {"status": "ok", "model_name": MODEL_NAME, "model_loaded": loaded}
 
 
 @app.post("/predict", response_model=PredictResponse)
