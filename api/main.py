@@ -8,7 +8,7 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 # These come from docker-compose / .env. MODEL_NAME must match the name
-# Anto registers in MLflow -- agree on it with him.
+# Anto registers in MLflow (must use the same as him).
 MLFLOW_TRACKING_URI = os.getenv("MLFLOW_TRACKING_URI", "http://mlflow:5000")
 MODEL_NAME = os.getenv("MODEL_NAME", "CHANGE_ME_model")
 MODEL_VERSION = os.getenv("MODEL_VERSION", "latest")
