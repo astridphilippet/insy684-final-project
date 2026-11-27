@@ -28,10 +28,14 @@ services:
         condition: service_healthy
 
   model-api:
-    image: busybox # placeholder, P4 replaces this with the FastAPI/Flask app
-    command: tail -f /dev/null
+    build: ./api
     ports:
       - "8000:8000"
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      MODEL_NAME: ${MODEL_NAME:-CHANGE_ME_model}
+    depends_on:
+      - mlflow
 
   frontend:
     image: busybox # placeholder, P5 replaces this with the Flask webpage
